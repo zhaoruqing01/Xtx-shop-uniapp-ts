@@ -8,11 +8,13 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AddressHandle: typeof import('./pages/goods/components/AddressHandle.vue')['default']
     CategoryPanel: typeof import('./pages/index/components/CategoryPanel.vue')['default']
     CateSkeleton: typeof import('./pages/category/components/CateSkeleton.vue')['default']
     CustomNavbar: typeof import('./pages/index/components/CustomNavbar.vue')['default']
     HotPanel: typeof import('./pages/index/components/HotPanel.vue')['default']
     PageSkeleton: typeof import('./pages/index/components/pageSkeleton.vue')['default']
+    ServerPanel: typeof import('./pages/goods/components/serverPanel.vue')['default']
     XtxGuess: typeof import('./components/XtxGuess.vue')['default']
     XtxSwiper: typeof import('./components/XtxSwiper.vue')['default']
   }

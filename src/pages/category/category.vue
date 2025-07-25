@@ -22,7 +22,6 @@ const getCateannerData = async () => {
 // 分类的数据
 const getCartData = async () => {
   const res = await getCartAPI()
-  console.log(res)
   categoryList.value = res.result
   if (categoryList.value.length > 0) {
     subCateData.value = categoryList.value[activeIndex.value].children
@@ -81,7 +80,7 @@ onLoad(async () => {
               :key="goods.id"
               class="goods"
               hover-class="none"
-              :url="`/pages/goods/goods?id=${item.id}`"
+              :url="`/pages/goods/goods?id=${goods.id}`"
             >
               <image class="image" :src="goods.picture"></image>
               <view class="name ellipsis">{{ goods.desc }}</view>
