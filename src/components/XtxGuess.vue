@@ -1,5 +1,43 @@
 <script setup lang="ts">
-//
+import { getGuessAPI } from '@/services/home'
+import { onMounted, ref } from 'vue'
+import type { GuessItem } from '@/types/home'
+import type { PageParams } from '@/types/global'
+
+// 请求参数
+const pageParams: Required<PageParams> = {
+  page: 1,
+  pageSize: 10,
+}
+//  判断数据是否全部加载完毕
+const isFinished = ref(false)
+// 获取猜你喜欢的数据
+const guessList = ref<GuessItem[]>([])
+const getGuessData = async () => {
+  if (isFinished.value === true) return uni.showToast({ title: '没有数据啦~', icon: 'none' })
+  const res = await getGuessAPI(pageParams)
+  guessList.value.push(...res.result.items)
+  if (pageParams.page < res.result.pages) {
+    pageParams.page++
+  } else {
+    isFinished.value = true
+  }
+}
+// 上拉重置数据
+const reSetData = () => {
+  pageParams.page = 1
+  guessList.value = []
+  isFinished.value = false
+}
+
+// 在组件挂载到页面时触发
+onMounted(() => {
+  getGuessData()
+})
+defineExpose({
+  reSetData,
+  getMore: getGuessData,
+})
 </script>
 
 <template>
@@ -10,23 +48,19 @@
   <view class="guess">
     <navigator
       class="guess-item"
-      v-for="item in 10"
-      :key="item"
+      v-for="item in guessList"
+      :key="item.id"
       :url="`/pages/goods/goods?id=4007498`"
     >
-      <image
-        class="image"
-        mode="aspectFill"
-        src="https://pcapi-xiaotuxian-front-devtest.itheima.net/miniapp/uploads/goods_big_1.jpg"
-      ></image>
-      <view class="name"> 德国THORE男表 超薄手表男士休闲简约夜光石英防水直径40毫米 </view>
+      <image class="image" mode="aspectFill" :src="item.picture"></image>
+      <view class="name"> {{ item.desc }} </view>
       <view class="price">
         <text class="small">¥</text>
-        <text>899.00</text>
+        <text>{{ item.price }}</text>
       </view>
     </navigator>
   </view>
-  <view class="loading-text"> 正在加载... </view>
+  <view class="loading-text"> {{ isFinished ? '到底啦~' : '正在加载...' }} </view>
 </template>
 
 <style lang="scss">

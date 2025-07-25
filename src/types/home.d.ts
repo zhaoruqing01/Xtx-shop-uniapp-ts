@@ -1,3 +1,4 @@
+import { GoodsItem } from './global'
 /** 首页-广告区域数据类型 */
 export type BannerItem = {
   /** 跳转链接 */
@@ -35,3 +36,6 @@ export type HotItem = {
   /** 推荐类型 */
   type: string
 }
+
+// 首页猜你喜欢数据类型,即res.resutl.item中数据的类型
+export type GuessItem = GoodsItem

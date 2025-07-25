@@ -1,5 +1,6 @@
 import { http } from '@/utils/http'
-import type { BannerItem, CategoryItem, HotItem } from '@/types/home'
+import type { BannerItem, CategoryItem, HotItem, GuessItem } from '@/types/home'
+import type { PageResult, PageParams } from '@/types/global'
 
 // 获取轮播图的数据
 export const getHomeBannerAPI = (distributionSite = 1) => {
@@ -23,5 +24,13 @@ export const getHomeHotAPI = () => {
   return http<HotItem[]>({
     url: '/home/hot/mutli',
     method: 'GET',
+  })
+}
+
+// 获取猜你喜欢的数据
+export const getGuessAPI = (data?: PageParams) => {
+  return http<PageResult<GuessItem>>({
+    url: '/home/goods/guessLike',
+    data,
   })
 }

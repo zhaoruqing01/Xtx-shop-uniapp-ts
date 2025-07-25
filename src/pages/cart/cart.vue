@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <view class="cart">cart</view>
+  <XtxGuess></XtxGuess>
 </template>
 
 <style lang="scss">

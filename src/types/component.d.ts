@@ -3,7 +3,7 @@
  *   现调整为
  * declare module 'vue'
  */
-import XtxSwiper from './XtxSwiper.vue'
+import XtxSwiper from '@/components/XtxSwiper.vue'
 import XtxGuess from '@/components/XtxGuess.vue'
 import 'vue'
 declare module 'vue' {
@@ -13,3 +13,6 @@ declare module 'vue' {
     XtxGuess: typeof XtxGuess
   }
 }
+
+// 设置全局组件的类型
+export type XtxGuessInstance = InstanceType<typeof XtxGuess>
