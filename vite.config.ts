@@ -7,16 +7,21 @@ import { resolve } from 'path'
 const CustomResolver = (componentName: string) => {
   // 处理UniApp项目中的自定义组件
   // 假设组件放在src/components目录下
-  if (componentName.startsWith('Uni') || componentName.startsWith('Xtx')) {
+  if (componentName.startsWith('Xtx')) {
     return {
       name: componentName,
-      from: resolve(__dirname, './src/components'),
+      from: resolve(__dirname, `./src/components/${componentName}.vue`),
     }
   }
 }
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, 'src'),
+    },
+  },
   build: {
     // 开发阶段启用源码映射
     sourcemap: process.env.NODE_ENV === 'development',

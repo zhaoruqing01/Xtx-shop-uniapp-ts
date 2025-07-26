@@ -12,9 +12,13 @@ declare module 'vue' {
     CategoryPanel: typeof import('./pages/index/components/CategoryPanel.vue')['default']
     CateSkeleton: typeof import('./pages/category/components/CateSkeleton.vue')['default']
     CustomNavbar: typeof import('./pages/index/components/CustomNavbar.vue')['default']
+    GoodsCateSkeleton: typeof import('./pages/goods/components/GoodsCateSkeleton.vue')['default']
     HotPanel: typeof import('./pages/index/components/HotPanel.vue')['default']
+    IndexStatic: typeof import('./components/vk-data-goods-sku-popup/pages/index-static.vue')['default']
     PageSkeleton: typeof import('./pages/index/components/pageSkeleton.vue')['default']
     ServerPanel: typeof import('./pages/goods/components/ServerPanel.vue')['default']
+    VkDataGoodsSkuPopup: typeof import('./components/vk-data-goods-sku-popup/components/vk-data-goods-sku-popup/vk-data-goods-sku-popup.vue')['default']
+    VkDataInputNumberBox: typeof import('./components/vk-data-goods-sku-popup/components/vk-data-input-number-box/vk-data-input-number-box.vue')['default']
     XtxGuess: typeof import('./components/XtxGuess.vue')['default']
     XtxSwiper: typeof import('./components/XtxSwiper.vue')['default']
   }

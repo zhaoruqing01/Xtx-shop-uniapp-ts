@@ -1,3 +1,7 @@
+<!-- Renamed from CateSkeleton to GoodsCateSkeleton to resolve naming conflict -->
+<script setup lang="ts">
+// 显式导出组件以解决依赖分析忽略问题
+</script>
 <template name="skeleton">
   <view class="sk-container">
     <scroll-view :scroll-y="true" class="viewport viewport" :enable-back-to-top="true">
