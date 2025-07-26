@@ -5,7 +5,7 @@ import { getGoodsDatailAPI } from '@/services/goods'
 import type { GoodsResult } from '@/types/goods'
 import UniPopup from '@dcloudio/uni-ui/lib/uni-popup/uni-popup.vue'
 import AddressHandle from './components/AddressHandle.vue'
-import ServerPanel from './components/serverPanel.vue'
+import ServerPanel from './components/ServerPanel.vue'
 import CateSkeleton from './components/CateSkeleton.vue'
 // 获取屏幕边界到安全区域距离
 const { safeAreaInsets } = uni.getSystemInfoSync()

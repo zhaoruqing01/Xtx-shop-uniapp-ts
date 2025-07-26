@@ -21,7 +21,9 @@
     {
       "path": "pages/my/my",
       "style": {
-        "navigationBarTitleText": "我的"
+        "navigationStyle": "custom", // 表示隐藏默认顶部导航栏,并设置自定义导航栏
+        "navigationBarTitleText": "我的",
+        "navigationBarTextStyle": "white"
       }
     },
     {
@@ -39,7 +41,8 @@
     {
       "path": "pages/login/login",
       "style": {
-        "navigationBarTitleText": "登录"
+        "navigationBarTitleText": "登录",
+        "navigationBarBackgroundColor": "#fff"
       }
     },
     {
@@ -93,5 +96,37 @@
         "selectedIconPath": "static/tabs/user_selected.png"
       }
     ]
+  },
+  // 分包加载规则
+  "subPackages": [
+    {
+      // 子包的根目录
+      "root": "pagesMemeber",
+      // 页面目录和窗口表现
+      "pages": [
+        {
+          "path": "settings/settings",
+          "style": {
+            "navigationBarTitleText": "设置"
+          }
+        },
+        {
+          "path": "profile/profile",
+          "style": {
+            "navigationStyle": "custom", // 表示隐藏默认顶部导航栏,并设置自定义导航栏
+            "navigationBarTitleText": "个人信息"
+          }
+        }
+      ]
+    }
+  ],
+  // 分包预下载规则
+  "preloadRule": {
+    "pages/my/my": { // 表示进入哪个页面时开始加载分包数据
+      "network": "all", // [设置网络环境]
+      "packages": [
+        "pagesMemeber"
+      ] // [分包根目录]
+    }
   }
 }

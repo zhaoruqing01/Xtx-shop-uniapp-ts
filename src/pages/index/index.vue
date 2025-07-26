@@ -2,7 +2,7 @@
 //导入组件
 import { ref } from 'vue'
 import type { BannerItem, CategoryItem, HotItem } from '@/types/home'
-import type { XtxGuessInstance } from '@/types/component'
+import { useGuessList } from '@/composables/useGuessList'
 import { getHomeBannerAPI, getHomeCategoryAPI, getHomeHotAPI } from '@/services/home.ts'
 import { onLoad } from '@dcloudio/uni-app'
 import CustomNavbar from './components/CustomNavbar.vue'
@@ -32,10 +32,8 @@ const getHomeHotData = async () => {
 }
 
 // 触底加载事件
-const guessRef = ref<XtxGuessInstance>()
-const onScrolltolower = () => {
-  guessRef.value?.getMore()
-}
+// 猜你喜欢无限加载 设置为组合式函数,实现函数的复用
+const { guessRef, onScrolltolower } = useGuessList()
 
 // 下拉刷新事件
 // 请求回来后停止刷新动画
