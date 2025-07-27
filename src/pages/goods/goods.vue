@@ -7,8 +7,12 @@ import UniPopup from '@dcloudio/uni-ui/lib/uni-popup/uni-popup.vue'
 import AddressHandle from './components/AddressHandle.vue'
 import ServerPanel from './components/ServerPanel.vue'
 import GoodsCateSkeleton from './components/GoodsCateSkeleton.vue'
-import type { SkuPopupLocaldata } from '@/components/vk-data-goods-sku-popup/vk-data-goods-sku-popup'
-import type { SkuPopupInstanceType } from '@/components/vk-data-goods-sku-popup/vk-data-goods-sku-popup'
+import type {
+  SkuPopupLocaldata,
+  SkuPopupEvent,
+  SkuPopupInstanceType,
+} from '@/components/vk-data-goods-sku-popup/vk-data-goods-sku-popup'
+import { addCartAPI } from '@/services/cart'
 // 获取屏幕边界到安全区域距离
 const { safeAreaInsets } = uni.getSystemInfoSync()
 
@@ -24,8 +28,6 @@ const isLoading = ref(false)
 // 获取数据
 const getGoodsDetailData = async () => {
   const res = await getGoodsDatailAPI(query.id)
-  console.log(res)
-
   goodsDetailData.value = res.result
   // SKU组件所需格式
   localdata.value = {
@@ -68,7 +70,19 @@ const skuPopupRef = ref<SkuPopupInstanceType>()
 const selectArrText = computed(() => {
   return skuPopupRef.value?.selectArr?.join(' ').trim() || '请选择商品规格'
 })
-
+// 加入购物车的事件
+const onAddCart = async (ev: SkuPopupEvent) => {
+  const res = await addCartAPI({
+    skuId: ev._id,
+    count: ev.buy_num,
+  })
+  console.log(res)
+  uni.showToast({
+    icon: 'none',
+    title: '添加购物车成功',
+  })
+  isShowSku.value = false
+}
 // banner栏操作
 const currentIndex = ref(0)
 const onChange: UniHelper.SwiperOnChange = (ev) => {
@@ -116,6 +130,7 @@ onLoad(async () => {
         borderColor: '#27BA9B',
         backgroundColor: '#E9F8F5',
       }"
+      @cart="onAddCart"
     />
     <scroll-view scroll-y class="viewport">
       <!-- 基本信息 -->
