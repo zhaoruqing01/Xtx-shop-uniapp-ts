@@ -28,6 +28,8 @@ const isLoading = ref(false)
 // 获取数据
 const getGoodsDetailData = async () => {
   const res = await getGoodsDatailAPI(query.id)
+  console.log(111)
+  console.log(res)
   goodsDetailData.value = res.result
   // SKU组件所需格式
   localdata.value = {
@@ -113,10 +115,10 @@ onLoad(async () => {
 </script>
 
 <template>
-  <template v-if="isLoading">
+  <!-- <template v-if="!isLoading">
     <GoodsCateSkeleton></GoodsCateSkeleton>
-  </template>
-  <template v-else>
+  </template> -->
+  <template>
     <!-- SKU弹窗组件 -->
     <vk-data-goods-sku-popup
       v-model="isShowSku"

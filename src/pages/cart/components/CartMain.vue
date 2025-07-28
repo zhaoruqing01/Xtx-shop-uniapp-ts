@@ -9,6 +9,8 @@ import { useMemberStore } from '@/stores/modules/member'
 import type { CartItem } from '@/types/cart'
 import { onShow } from '@dcloudio/uni-app'
 import type { InputNumberBox } from '@/components/vk-data-input-number-box/vk-data-input-number-box'
+import { useGuessList } from '@/composables/useGuessList'
+import CartSkeleton from './CartSkeleton.vue'
 
 // 控制列表的显示或隐藏
 const isEmpty = ref(false)
@@ -16,7 +18,6 @@ const isEmpty = ref(false)
 const cartList = ref<CartItem[]>()
 const getCartListData = async () => {
   const res = await getMemberCartAPI()
-  console.log(res)
   cartList.value = res.result
   if (cartList.value.length > 0) {
     isEmpty.value = true
@@ -45,7 +46,6 @@ const onChangeAllCheck = () => {
 }
 
 // 筛选出所有选中的商品
-//
 const selctedItem = computed(() => {
   return cartList.value?.filter((item) => item.selected)
 })
@@ -63,97 +63,116 @@ const onPayment = () => {
     return uni.showToast({ icon: 'none', title: '请至少选择一个商品' })
   }
   // 否则跳转到支付页
+  uni.navigateTo({ url: '/pagesOrder/create/create' })
 }
+// 触底加载事件
+const { onScrolltolower, guessRef } = useGuessList()
+// 判断骨架屏的显现时机
+const isLoading = ref(true)
 // 页面出现时调用
-onShow(() => {
-  getCartListData()
+onShow(async () => {
+  isLoading.value = true
+  try {
+    await getCartListData() // 尝试获取数据
+  } catch (error) {
+    console.error('获取购物车数据失败', error)
+    // 可添加错误提示：uni.showToast({ title: '加载失败', icon: 'none' })
+  } finally {
+    isLoading.value = false // 无论成功/失败，最终都隐藏骨架屏
+  }
 })
 </script>
+
 <template>
-  <scroll-view scroll-y class="scroll-view">
-    <!-- 已登录: 显示购物车 -->
-    <template v-if="useMemberStore().profile?.token">
-      <!-- 购物车列表 -->
-      <view class="cart-list" v-if="isEmpty">
-        <!-- 优惠提示 -->
-        <view class="tips">
-          <text class="label">满减</text>
-          <text class="desc">满1件, 即可享受9折优惠</text>
-        </view>
-        <!-- 滑动操作分区 -->
-        <view>
-          <!-- 滑动操作项 -->
-          <view v-for="item in cartList" :key="item.skuId" class="cart-swipe">
-            <!-- 商品信息 -->
-            <view class="goods">
-              <!-- 选中状态 -->
-              <text
-                @tap="handleState(item)"
-                class="checkbox"
-                :class="{ checked: item.selected }"
-              ></text>
-              <navigator
-                :url="`/pages/goods/goods?id=${item.id}`"
-                hover-class="none"
-                class="navigator"
-              >
-                <image mode="aspectFill" class="picture" :src="item.picture"></image>
-                <view class="meta">
-                  <view class="name ellipsis">{{ item.name }}</view>
-                  <view class="attrsText ellipsis">{{ item.attrsText }}</view>
-                  <view class="price">{{ item.price }}</view>
+  <template v-if="isLoading">
+    <CartSkeleton></CartSkeleton>
+  </template>
+  <template v-else>
+    <scroll-view scroll-y class="scroll-view" @scrolltolower="onScrolltolower">
+      <!-- 已登录: 显示购物车 -->
+      <template v-if="useMemberStore().profile?.token">
+        <!-- 购物车列表 -->
+        <view class="cart-list" v-if="isEmpty">
+          <!-- 优惠提示 -->
+          <view class="tips">
+            <text class="label">满减</text>
+            <text class="desc">满1件, 即可享受9折优惠</text>
+          </view>
+          <!-- 滑动操作分区 -->
+          <view>
+            <!-- 滑动操作项 -->
+            <view v-for="item in cartList" :key="item.skuId" class="cart-swipe">
+              <!-- 商品信息 -->
+              <view class="goods">
+                <!-- 选中状态 -->
+                <text
+                  @tap="handleState(item)"
+                  class="checkbox"
+                  :class="{ checked: item.selected }"
+                ></text>
+                <navigator
+                  :url="`/pages/goods/goods?id=${item.id}`"
+                  hover-class="none"
+                  class="navigator"
+                >
+                  <image mode="aspectFill" class="picture" :src="item.picture"></image>
+                  <view class="meta">
+                    <view class="name ellipsis">{{ item.name }}</view>
+                    <view class="attrsText ellipsis">{{ item.attrsText }}</view>
+                    <view class="price">{{ item.price }}</view>
+                  </view>
+                </navigator>
+                <!-- 商品数量 -->
+                <view class="count">
+                  <vk-data-input-number-box
+                    v-model="item.count"
+                    :min="1"
+                    :max="item.stock"
+                    :index="item.skuId"
+                    @change="onChangeCount"
+                  ></vk-data-input-number-box>
                 </view>
-              </navigator>
-              <!-- 商品数量 -->
-              <view class="count">
-                <vk-data-input-number-box
-                  v-model="item.count"
-                  :min="1"
-                  :max="item.stock"
-                  :index="item.skuId"
-                  @change="onChangeCount"
-                ></vk-data-input-number-box>
               </view>
             </view>
           </view>
         </view>
-      </view>
-      <!-- 购物车空状态 -->
-      <view class="cart-blank" v-else>
-        <image src="/static/images/blank_cart.png" class="image" />
-        <text class="text">购物车还是空的，快来挑选好货吧</text>
-        <navigator open-type="switchTab" url="/pages/index/index" hover-class="none">
-          <button class="button">去首页看看</button>
-        </navigator>
-      </view>
-      <!-- 吸底工具栏 -->
-      <view class="toolbar">
-        <text class="all" :class="{ checked: isAllCheck }" @tap="onChangeAllCheck">全选</text>
-        <text class="text">合计:</text>
-        <text class="amount">{{ selctedAllPrice }}</text>
-        <view class="button-grounp">
-          <view
-            class="button payment-button"
-            @tap="onPayment"
-            :class="{ disabled: selctedCount === 0 }"
-          >
-            去结算({{ selctedCount }})
+        <!-- 购物车空状态 -->
+        <view class="cart-blank" v-else>
+          <image src="/static/images/blank_cart.png" class="image" />
+          <text class="text">购物车还是空的，快来挑选好货吧</text>
+          <navigator open-type="switchTab" url="/pages/index/index" hover-class="none">
+            <button class="button">去首页看看</button>
+          </navigator>
+        </view>
+        <!-- 吸底工具栏 -->
+        <view class="toolbar">
+          <text class="all" :class="{ checked: isAllCheck }" @tap="onChangeAllCheck">全选</text>
+          <text class="text">合计:</text>
+          <text class="amount">{{ selctedAllPrice }}</text>
+          <view class="button-grounp">
+            <view
+              class="button payment-button"
+              @tap="onPayment"
+              :class="{ disabled: selctedCount === 0 }"
+            >
+              去结算({{ selctedCount }})
+            </view>
           </view>
         </view>
+      </template>
+      <!-- 未登录: 提示登录 -->
+      <view class="login-blank" v-else>
+        <text class="text">登录后可查看购物车中的商品</text>
+        <navigator url="/pages/login/login" hover-class="none">
+          <button class="button">去登录</button>
+        </navigator>
       </view>
-    </template>
-    <!-- 未登录: 提示登录 -->
-    <view class="login-blank" v-else>
-      <text class="text">登录后可查看购物车中的商品</text>
-      <navigator url="/pages/login/login" hover-class="none">
-        <button class="button">去登录</button>
-      </navigator>
-    </view>
-    <!-- 猜你喜欢 -->
-    <XtxGuess ref="guessRef"></XtxGuess>
-    <!-- 底部占位空盒子 -->
-    <view class="toolbar-height"></view>
-  </scroll-view>
+      <!-- 猜你喜欢 -->
+      <XtxGuess ref="guessRef"></XtxGuess>
+      <!-- 底部占位空盒子 -->
+      <view class="toolbar-height"></view>
+    </scroll-view>
+  </template>
 </template>
 
 <style lang="scss">
