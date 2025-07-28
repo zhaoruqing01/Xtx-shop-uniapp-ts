@@ -41,7 +41,7 @@ Xtx-shop-uniapp-ts 是一个基于 uni-app 和 TypeScript 开发的跨平台电�
 
 bash
 
-```bash
+```
 pnpm install
 ```
 
@@ -51,25 +51,19 @@ pnpm install
 
 - H5 端：
 
-  bash
-
-  ```bash
+  ```
   uni dev -p h5
   ```
 
 - 微信小程序端：
 
-  bash
-
-  ```bash
+  ```
   uni dev -p mp-weixin
   ```
 
 - 支付宝小程序端：
 
-  bash
-
-  ```bash
+  ```
   uni dev -p mp-alipay
   ```
 
@@ -81,17 +75,13 @@ pnpm install
 
 - H5 端：
 
-  bash
-
-  ```bash
+  ```
   uni build -p h5
   ```
 
 - 微信小程序端：
 
-  bash
-
-  ```bash
+  ```
   uni build -p mp-weixin
   ```
 
@@ -101,7 +91,7 @@ pnpm install
 
 plaintext
 
-```plaintext
+```
 Xtx-shop-uniapp-ts/
 ├── src/
 │   ├── uni_modules/          # uni 生态模块（uni-scss、uni-popup 等）
