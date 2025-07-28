@@ -10,8 +10,8 @@ declare module 'vue' {
   export interface GlobalComponents {
     AddressHandle: typeof import('./pages/goods/components/AddressHandle.vue')['default']
     CartMain: typeof import('./pages/cart/components/CartMain.vue')['default']
+    CartSkeleton: typeof import('./pages/cart/components/CartSkeleton.vue')['default']
     CategoryPanel: typeof import('./pages/index/components/CategoryPanel.vue')['default']
-    Cateskeleton: typeof import('./pages/goods/components/cateskeleton.vue')['default']
     CateSkeleton: typeof import('./pages/category/components/CateSkeleton.vue')['default']
     CustomNavbar: typeof import('./pages/index/components/CustomNavbar.vue')['default']
     GoodsCateSkeleton: typeof import('./pages/goods/components/GoodsCateSkeleton.vue')['default']

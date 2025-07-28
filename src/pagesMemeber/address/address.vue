@@ -3,13 +3,17 @@ import { getAddressListAPI } from '@/services/address'
 import type { AddressItem } from '@/types/address'
 import { onShow } from '@dcloudio/uni-app'
 import { ref } from 'vue'
+import { addressStore } from '@/stores/modules/address'
 // 获取收货地址列表
 const addressList = ref<AddressItem[]>([])
 const getAddressList = async () => {
   const res = await getAddressListAPI()
-  console.log(res)
-
   addressList.value = res.result
+}
+// 修改提交订单页面的地址
+const changeAddress = (item: AddressItem) => {
+  addressStore().setAddressInfo(item)
+  uni.navigateBack()
 }
 onShow(() => {
   getAddressList()
@@ -23,7 +27,7 @@ onShow(() => {
       <view v-if="addressList" class="address">
         <view class="address-list">
           <!-- 收货地址项 -->
-          <view class="item" v-for="item in addressList" :key="item.id">
+          <view class="item" v-for="item in addressList" :key="item.id" @tap="changeAddress(item)">
             <view class="item-content">
               <view class="user">
                 {{ item.receiver }}
@@ -35,6 +39,7 @@ onShow(() => {
                 class="edit"
                 hover-class="none"
                 :url="`/pagesMemeber/address-form/address-form?id=${item.id}`"
+                @tap.stop="() => {}"
               >
                 修改
               </navigator>
