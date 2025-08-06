@@ -12,7 +12,6 @@ Xtx-shop-uniapp-ts 是一个基于 uni-app 和 TypeScript 开发的跨平台电�
 | TypeScript                  | ^5.1.6                       | 强类型编程语言     |
 | Pinia                       | 2.0.27                       | 状态管理库         |
 | pinia-plugin-persistedstate | ^3.2.0                       | Pinia 持久化插件   |
-| vue-i18n                    | ^9.2.2                       | 国际化解决方案     |
 | @dcloudio/uni-ui            | ^1.5.10                      | uni 生态 UI 组件库 |
 | ESLint                      | ^8.22.0                      | 代码规范检查       |
 | Husky                       | ^8.0.0                       | Git 钩子工具       |
